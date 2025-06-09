@@ -6,62 +6,132 @@
   <title>你在干嘛？</title>
   <style>
     body {
+      margin: 0; padding: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffd1dc, #ffe4e1);
       font-family: "微软雅黑", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
       text-align: center;
-      padding: 60px 20px;
-      background-color: #fff8f0;
+      width: 90%;
+      max-width: 350px;
+      z-index: 10;
     }
     h1 {
       font-size: 28px;
-      color: #333;
-      margin-bottom: 40px;
+      color: #ff6b81;
+      margin-bottom: 30px;
     }
-    .button {
-      display: inline-block;
-      margin: 20px;
+    button {
+      margin: 10px;
       padding: 15px 30px;
-      font-size: 20px;
+      font-size: 18px;
       border: none;
-      border-radius: 10px;
+      border-radius: 30px;
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 10;
     }
     #missBtn {
-      background-color: #ff5b5b;
+      background-color: #ff6b81;
       color: white;
     }
+    #missBtn:hover {
+      background-color: #ff3b61;
+      transform: scale(1.1);
+    }
     #otherBtn {
-      background-color: #ccc;
+      background-color: #f1f1f1;
       color: #333;
+    }
+    #otherBtn:hover {
+      background-color: #e0e0e0;
+      transform: scale(0.95);
+    }
+    .big-heart {
+      position: fixed;
+      font-size: 60px;
+      color: #ff2d55;
+      animation: heartFloat 2.5s ease forwards;
+      pointer-events: none;
+      user-select: none;
+      z-index: 1000;
+      filter: drop-shadow(0 0 6px #ff2d55);
+    }
+    @keyframes heartFloat {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(0, -150px) scale(2);
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>你在干嘛？</h1>
-  <button id="missBtn" class="button">想我</button>
-  <button id="otherBtn" class="button">其他</button>
+  <div class="card">
+    <h1>你在干嘛？</h1>
+    <button id="missBtn">想我</button>
+    <button id="otherBtn">干别的事情？</button>
+  </div>
 
   <script>
-    let missBtn = document.getElementById('missBtn');
-    let otherBtn = document.getElementById('otherBtn');
-    let missFontSize = 20;
-    let otherFontSize = 20;
+    const missBtn = document.getElementById('missBtn');
+    const otherBtn = document.getElementById('otherBtn');
+
+    let missSize = 18;
+    let otherSize = 18;
 
     otherBtn.onclick = () => {
-      // 想我按钮变大
-      missFontSize += 5;
-      otherFontSize = Math.max(12, otherFontSize - 2); // 最小12px
-      missBtn.style.fontSize = missFontSize + 'px';
-      otherBtn.style.fontSize = otherFontSize + 'px';
+      missSize += 16;
+      otherSize = Math.max(12, otherSize - 1);
+      missBtn.style.fontSize = missSize + 'px';
+      otherBtn.style.fontSize = otherSize + 'px';
     };
 
-    missBtn.onclick = () => {
-      alert('我就知道你在想我 😘');
-      // 页面退出（这里可以跳转或关闭）
-      window.close(); // 微信中无效，可跳转其他页面
-      // 或者跳转：
-      // window.location.href = "https://你的跳转地址.com";
+    missBtn.onclick = (event) => {
+      // 创建爱心元素
+      const heart = document.createElement('div');
+      heart.className = 'big-heart';
+      heart.textContent = '❤️';
+
+      const rect = event.target.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      heart.style.left = x + 'px';
+      heart.style.top = y + 'px';
+      heart.style.transformOrigin = 'center';
+
+      document.body.appendChild(heart);
+
+      heart.addEventListener('animationend', () => {
+        heart.remove();
+      });
+
+      setTimeout(() => {
+        if(confirm('我就知道你在想我 😘')) {
+          // 尝试关闭页面
+          window.close();
+          // 如果失败，跳转空白页模拟退出
+          setTimeout(() => {
+            window.location.href = "about:blank";
+          }, 500);
+        }
+      }, 300);
     };
   </script>
 
