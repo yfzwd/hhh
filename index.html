@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>查看我的 IP</title>
+  <style>
+    body { font-family: "Arial", sans-serif; text-align: center; padding: 50px; background-color: #f4f4f4; }
+    h1 { color: #333; }
+    #ipLink { display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #1AAD19; color: white; text-decoration: none; border-radius: 6px; font-size: 18px; }
+    #ipLink:hover { background-color: #179b16; }
+  </style>
+</head>
+<body>
+  <h1>您的公网 IP 是：</h1>
+  <a id="ipLink" href="#" target="_blank">获取中...</a>
+  <script>
+    fetch("https://api.ipify.org?format=json")
+      .then(response => response.json())
+      .then(data => {
+        const ip = data.ip;
+        const jumpUrl = `http://${ip}:8080`; // 可自定义跳转地址
+        const ipLink = document.getElementById("ipLink");
+        ipLink.textContent = ip;
+        ipLink.href = jumpUrl;
+      })
+      .catch(error => {
+        console.error("获取 IP 失败：", error);
+        document.getElementById("ipLink").textContent = "获取失败";
+      });
+  </script>
+</body>
+</html>
