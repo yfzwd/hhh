@@ -1,33 +1,69 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>查看我的 IP</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>你在干嘛？</title>
   <style>
-    body { font-family: "Arial", sans-serif; text-align: center; padding: 50px; background-color: #f4f4f4; }
-    h1 { color: #333; }
-    #ipLink { display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #1AAD19; color: white; text-decoration: none; border-radius: 6px; font-size: 18px; }
-    #ipLink:hover { background-color: #179b16; }
+    body {
+      font-family: "微软雅黑", sans-serif;
+      text-align: center;
+      padding: 60px 20px;
+      background-color: #fff8f0;
+    }
+    h1 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 40px;
+    }
+    .button {
+      display: inline-block;
+      margin: 20px;
+      padding: 15px 30px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    #missBtn {
+      background-color: #ff5b5b;
+      color: white;
+    }
+    #otherBtn {
+      background-color: #ccc;
+      color: #333;
+    }
   </style>
 </head>
 <body>
-  <h1>您的公网 IP 是：</h1>
-  <a id="ipLink" href="#" target="_blank">获取中...</a>
+
+  <h1>你在干嘛？</h1>
+  <button id="missBtn" class="button">想我</button>
+  <button id="otherBtn" class="button">其他</button>
+
   <script>
-    fetch("https://api.ipify.org?format=json")
-      .then(response => response.json())
-      .then(data => {
-        const ip = data.ip;
-        const jumpUrl = `http://${ip}:8080`; // 可自定义跳转地址
-        const ipLink = document.getElementById("ipLink");
-        ipLink.textContent = ip;
-        ipLink.href = jumpUrl;
-      })
-      .catch(error => {
-        console.error("获取 IP 失败：", error);
-        document.getElementById("ipLink").textContent = "获取失败";
-      });
+    let missBtn = document.getElementById('missBtn');
+    let otherBtn = document.getElementById('otherBtn');
+    let missFontSize = 20;
+    let otherFontSize = 20;
+
+    otherBtn.onclick = () => {
+      // 想我按钮变大
+      missFontSize += 5;
+      otherFontSize = Math.max(12, otherFontSize - 2); // 最小12px
+      missBtn.style.fontSize = missFontSize + 'px';
+      otherBtn.style.fontSize = otherFontSize + 'px';
+    };
+
+    missBtn.onclick = () => {
+      alert('我就知道你在想我 😘');
+      // 页面退出（这里可以跳转或关闭）
+      window.close(); // 微信中无效，可跳转其他页面
+      // 或者跳转：
+      // window.location.href = "https://你的跳转地址.com";
+    };
   </script>
+
 </body>
 </html>
